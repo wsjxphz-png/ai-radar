@@ -1,0 +1,36 @@
+name: AI 雷达日报
+
+on:
+  schedule:
+    # 北京时间 09:00 = UTC 01:00
+    # GitHub Actions cron 使用 UTC 时间
+    - cron: '0 1 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  daily-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 生成日报
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        run: python main.py
+
+      - name: 失败通知（如果日报生成失败）
+        if: failure()
+        run: |
+          echo "日报生成失败，请检查 GitHub Actions 日志。"

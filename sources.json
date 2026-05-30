@@ -1,0 +1,354 @@
+{
+  "sources": [
+    {
+      "name": "Sam Altman",
+      "platform": "x",
+      "username": "sama",
+      "category": "ai-startup",
+      "note": "OpenAI CEO"
+    },
+    {
+      "name": "Andrej Karpathy",
+      "platform": "x",
+      "username": "karpathy",
+      "category": "ai-startup",
+      "note": "Eureka Labs, 前 Tesla AI/OpenAI"
+    },
+    {
+      "name": "Jim Fan",
+      "platform": "x",
+      "username": "DrJimFan",
+      "category": "ai-startup",
+      "note": "NVIDIA AI Research"
+    },
+    {
+      "name": "Aravind Srinivas",
+      "platform": "x",
+      "username": "AravSrinivas",
+      "category": "ai-startup",
+      "note": "Perplexity CEO"
+    },
+    {
+      "name": "Sarah Guo",
+      "platform": "x",
+      "username": "saranormous",
+      "category": "ai-startup",
+      "note": "Conviction VC, AI投资"
+    },
+    {
+      "name": "Nathan Lambert",
+      "platform": "x",
+      "username": "natolambert",
+      "category": "ai-startup",
+      "note": "AI Daily Brief, LLM训练专家"
+    },
+    {
+      "name": "Alexandr Wang",
+      "platform": "x",
+      "username": "alexandr_wang",
+      "category": "ai-startup",
+      "note": "Scale AI CEO"
+    },
+    {
+      "name": "Emad Mostaque",
+      "platform": "x",
+      "username": "EMostaque",
+      "category": "ai-startup",
+      "note": "Stability AI前CEO, 开源AI"
+    },
+    {
+      "name": "n8n",
+      "platform": "x",
+      "username": "n8n_io",
+      "category": "ai-workflow",
+      "note": "开源自动化平台"
+    },
+    {
+      "name": "Cole Medin",
+      "platform": "x",
+      "username": "ColeMedin",
+      "category": "ai-workflow",
+      "note": "n8n+AI Agent教程"
+    },
+    {
+      "name": "David Ondrej",
+      "platform": "x",
+      "username": "david_ondrej",
+      "category": "ai-workflow",
+      "note": "AI自动化专家"
+    },
+    {
+      "name": "Dify",
+      "platform": "x",
+      "username": "dify_ai",
+      "category": "ai-workflow",
+      "note": "开源LLM应用平台"
+    },
+    {
+      "name": "LangFlow",
+      "platform": "x",
+      "username": "langflow_ai",
+      "category": "ai-workflow",
+      "note": "LangChain可视化工具"
+    },
+    {
+      "name": "Ben Tossell",
+      "platform": "x",
+      "username": "bentossell",
+      "category": "ai-workflow",
+      "note": "Ben's Bites, AI工具精选"
+    },
+    {
+      "name": "Harrison Chase",
+      "platform": "x",
+      "username": "hwchase17",
+      "category": "agent",
+      "note": "LangChain创始人"
+    },
+    {
+      "name": "Yohei Nakajima",
+      "platform": "x",
+      "username": "yoheinakajima",
+      "category": "agent",
+      "note": "BabyAGI创造者"
+    },
+    {
+      "name": "CrewAI",
+      "platform": "x",
+      "username": "crewAIInc",
+      "category": "agent",
+      "note": "多Agent协作框架"
+    },
+    {
+      "name": "Scott Wu",
+      "platform": "x",
+      "username": "ScottWu46",
+      "category": "agent",
+      "note": "Cognition AI/Devin创始人"
+    },
+    {
+      "name": "Anthropic",
+      "platform": "x",
+      "username": "AnthropicAI",
+      "category": "agent",
+      "note": "Claude官方"
+    },
+    {
+      "name": "Manus AI",
+      "platform": "x",
+      "username": "ManusAI_HQ",
+      "category": "agent",
+      "note": "通用Agent产品"
+    },
+    {
+      "name": "Cristóbal Valenzuela",
+      "platform": "x",
+      "username": "c_valenzuelab",
+      "category": "ai-content",
+      "note": "Runway CEO, AI视频"
+    },
+    {
+      "name": "David Holz",
+      "platform": "x",
+      "username": "DavidSHolz",
+      "category": "ai-content",
+      "note": "Midjourney创始人"
+    },
+    {
+      "name": "Bilawal Sidhu",
+      "platform": "x",
+      "username": "bilawalsidhu",
+      "category": "ai-content",
+      "note": "AI创意内容, 前Google AR"
+    },
+    {
+      "name": "Nick St. Pierre",
+      "platform": "x",
+      "username": "nickfloats",
+      "category": "ai-content",
+      "note": "Midjourney提示词大师"
+    },
+    {
+      "name": "Matt Wolfe",
+      "platform": "x",
+      "username": "mreflow",
+      "category": "ai-content",
+      "note": "800K粉丝, AI工具周报"
+    },
+    {
+      "name": "Pieter Levels",
+      "platform": "x",
+      "username": "levelsio",
+      "category": "productivity",
+      "note": "独立开发者之神, $270K MRR"
+    },
+    {
+      "name": "Tibo Louis-Lucas",
+      "platform": "x",
+      "username": "tibo_maker",
+      "category": "productivity",
+      "note": "Taplio/Tweet Hunter创始人"
+    },
+    {
+      "name": "Lenny Rachitsky",
+      "platform": "x",
+      "username": "lennysan",
+      "category": "productivity",
+      "note": "产品+增长播客"
+    },
+    {
+      "name": "Greg Isenberg",
+      "platform": "x",
+      "username": "gregisenberg",
+      "category": "productivity",
+      "note": "AI产品+增长策略"
+    },
+    {
+      "name": "Rowan Cheung",
+      "platform": "x",
+      "username": "rowancheung",
+      "category": "productivity",
+      "note": "The Rundown AI, 每日AI速览"
+    },
+    {
+      "name": "Y Combinator",
+      "platform": "youtube",
+      "channel": "ycombinator",
+      "category": "ai-startup",
+      "note": "顶级加速器, AI创业方法论"
+    },
+    {
+      "name": "Lex Fridman Podcast",
+      "platform": "youtube",
+      "channel": "lexfridman",
+      "category": "ai-startup",
+      "note": "480万订阅, AI领袖深度访谈"
+    },
+    {
+      "name": "No Priors",
+      "platform": "youtube",
+      "channel": "NoPriorsPodcast",
+      "category": "ai-startup",
+      "note": "Sarah Guo+Elad Gil, AI投资"
+    },
+    {
+      "name": "Lenny's Podcast",
+      "platform": "youtube",
+      "channel": "LennysPodcast",
+      "category": "ai-startup",
+      "note": "产品增长+AI应用"
+    },
+    {
+      "name": "Cole Medin",
+      "platform": "youtube",
+      "channel": "ColeMedin",
+      "category": "ai-workflow",
+      "note": "n8n+AI Agent教程第一人"
+    },
+    {
+      "name": "David Ondrej",
+      "platform": "youtube",
+      "channel": "DavidOndrej",
+      "category": "ai-workflow",
+      "note": "AI自动化完整工作流"
+    },
+    {
+      "name": "AI Foundations",
+      "platform": "youtube",
+      "channel": "AIFoundations",
+      "category": "ai-workflow",
+      "note": "AI自动化+vibe coding"
+    },
+    {
+      "name": "The AI Advantage",
+      "platform": "youtube",
+      "channel": "TheAIAdvantage",
+      "category": "ai-workflow",
+      "note": "40万订阅, 零代码AI工具"
+    },
+    {
+      "name": "Matt Wolfe",
+      "platform": "youtube",
+      "channel": "mattwolfe",
+      "category": "ai-content",
+      "note": "80万订阅, AI工具周报"
+    },
+    {
+      "name": "Two Minute Papers",
+      "platform": "youtube",
+      "channel": "TwoMinutePapers",
+      "category": "ai-content",
+      "note": "162万订阅, AI研究2分钟看懂"
+    },
+    {
+      "name": "AI Explained",
+      "platform": "youtube",
+      "channel": "aiexplained",
+      "category": "ai-content",
+      "note": "AI模型能力深度评测"
+    },
+    {
+      "name": "Curious Refuge",
+      "platform": "youtube",
+      "channel": "CuriousRefuge",
+      "category": "ai-content",
+      "note": "AI电影制作前沿"
+    },
+    {
+      "name": "LangChain",
+      "platform": "youtube",
+      "channel": "LangChain",
+      "category": "agent",
+      "note": "Agent框架官方教程"
+    },
+    {
+      "name": "Matthew Berman",
+      "platform": "youtube",
+      "channel": "MatthewBerman",
+      "category": "agent",
+      "note": "开源Agent+本地LLM部署"
+    },
+    {
+      "name": "AI Engineer",
+      "platform": "youtube",
+      "channel": "aiDotEngineer",
+      "category": "agent",
+      "note": "Agent架构峰会"
+    },
+    {
+      "name": "Dave Ebbelaar",
+      "platform": "youtube",
+      "channel": "DaveEbbelaar",
+      "category": "agent",
+      "note": "AI自动化+Agent实战"
+    },
+    {
+      "name": "Dan Koe",
+      "platform": "youtube",
+      "channel": "DanKoe",
+      "category": "productivity",
+      "note": "一人公司98%利润率, AI系统"
+    },
+    {
+      "name": "Thomas Frank",
+      "platform": "youtube",
+      "channel": "ThomasFrankExplains",
+      "category": "productivity",
+      "note": "AI+生产力系统, Notion AI"
+    },
+    {
+      "name": "Liam Ottley",
+      "platform": "youtube",
+      "channel": "LiamOttley",
+      "category": "productivity",
+      "note": "69万订阅, AI自动化→SaaS"
+    },
+    {
+      "name": "Tiago Forte",
+      "platform": "youtube",
+      "channel": "TiagoForte",
+      "category": "productivity",
+      "note": "Second Brain作者, 知识管理+AI"
+    }
+  ]
+}
