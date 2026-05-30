@@ -285,9 +285,11 @@ SYSTEM_PROMPT = f"""你是「AI 创作者参谋部」的首席分析师。你的
 | **可复制性** | 需要特殊条件或编程能力 | 今天就能照着做，零门槛 |
 | **与用户相关** | 和非技术创作者无关 | 文科生/个人创作者刚需 |
 
-**总分 < 30 → 丢弃。**
-**总分 ≥ 36 → 头条级。**
-**总分 30-35 → 精选级。**
+**总分 < 24 → 丢弃。**
+**总分 ≥ 32 → 头条级（今日最重要机会）。**
+**总分 24-31 → 精选级（速览/工作流/工具/商业模式）。**
+
+⚠️ 重要：不要把门槛设得太高。一个工具推荐如果「今天就能用、能提升创作效率」，即便信息增量不高也值得保留。宁可多保留一些，让用户自己判断。
 
 ---
 
@@ -323,10 +325,16 @@ SYSTEM_PROMPT = f"""你是「AI 创作者参谋部」的首席分析师。你的
 ### 📈 趋势雷达（1 条）
 过去 7-30 天，哪些趋势升温/降温/值得布局。
 
-### 💡 给我的建议（最重要）
+### 💡 给我的建议（**最重要，必须输出，不能为空**）
+
 结合用户背景（文科生、非技术、内容创作者），回答：
 如果我是这个用户，今天最值得投入 2 小时研究什么？为什么？具体行动步骤是什么？
-要求：务实、具体、可执行、不要空话。
+
+**必须输出。** 即使今天的内容质量不高、没有明显的机会，也要基于抓取到的内容给出至少一条务实的建议。例如：
+- 「今天没有什么重磅机会，但可以花 2 小时研究 Product Hunt 上新出现的 XX 工具」
+- 「今天的 Reddit 讨论集中在 XX 话题，建议做一期相关科普内容」
+
+要求：务实、具体、可执行、不要空话。不要说「持续关注」「保持学习」这种正确的废话。
 
 ---
 
@@ -365,7 +373,8 @@ SYSTEM_PROMPT = f"""你是「AI 创作者参谋部」的首席分析师。你的
   "advice_for_me": {{"today_focus": "", "why": "", "steps": [""], "time_investment": ""}}
 }}
 
-宁缺毋滥。如果某个栏目真的没有足够好的内容，输出空数组 []。不要为了填满而降低标准。"""
+宁缺毋滥。但如果某个栏目真的没有足够好的内容，输出空数组 []。
+**例外：「给我的建议」不能为空，必须输出有实质内容的建议。**"""
 
 
 def build_ai_input(items: List[Dict]) -> str:
@@ -534,18 +543,26 @@ def format_feishu(ai: Dict, stats: Dict) -> Dict:
 
     # 💡 给我的建议（最重要）
     advice = ai.get("advice_for_me", {})
-    if advice:
+    if advice and advice.get("today_focus"):
         lines = []
         lines.append(f"**🎯 今天最值得投入 2 小时：{advice.get('today_focus','')}**")
         lines.append(f"")
-        lines.append(f"为什么：{advice.get('why','')}")
-        lines.append(f"")
-        lines.append(f"行动步骤：")
-        for i, step in enumerate(advice.get("steps", []), 1):
-            lines.append(f"  {i}. {step}")
-        lines.append(f"")
+        why = advice.get("why", "")
+        if why:
+            lines.append(f"为什么：{why}")
+            lines.append(f"")
+        steps = advice.get("steps", [])
+        if steps:
+            lines.append(f"行动步骤：")
+            for i, step in enumerate(steps, 1):
+                lines.append(f"  {i}. {step}")
+            lines.append(f"")
         lines.append(f"⏱️ 时间投入：{advice.get('time_investment','2小时')}")
         md.append(section("💡 给我的建议", "\n".join(lines)))
+    if not md:
+        # 兜底：如果所有栏目都空，至少给一个提示
+        md.append("⚠️ 今日内容质量未达日报标准，建议直接查看 Product Hunt 和 Reddit 发现新工具。")
+        md.append(f"\n今日共抓取 {stats['filtered']} 条内容，来自 {stats['ok_sources']} 个信息源。")
 
     # 尾部
     md.append("\n━━━━━━━━━━━━━━━━━━━")
