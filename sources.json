@@ -1,79 +1,70 @@
 {
-  "description": "AI机会雷达信息源 - 为内容创作者精选，覆盖AI创业/AI工作流/AI内容创作/个人生产力/Agent应用",
+  "description": "AI创作者机会雷达 - 为内容创作者精选：AI内容创作/工作流/创业/生产力/Agent",
   "sources": {
     "youtube": [
-      {"name": "Y Combinator", "channel_id": "UCcefcZRL2oaA_uBNeo5UOWg", "category": "ai-startup", "note": "顶级加速器，AI创业风向标。Lightcone播客也在这里"},
-      {"name": "OpenAI", "channel_id": "UCXZCJLdBC09xxGZ6gcdrc6A", "category": "ai-startup", "note": "GPT/Sora官方发布+教程"},
-      {"name": "Anthropic", "channel_id": "UCOIji0UklfggVrY7Ym-IfDQ", "category": "ai-startup", "note": "Claude官方，AI安全+提示工程"},
-      {"name": "Andrej Karpathy", "channel_id": "UCXUPKJO5MZQN11PqgIvyuvQ", "category": "ai-startup", "note": "LLM原理深度讲解，内容创作者的AI底层知识"},
-      {"name": "Matt Wolfe", "channel_id": "UCMyXJrrIGGyi7bnYI3c9mgA", "category": "ai-content", "note": "80万订阅，AI工具周报，发现选题的最佳来源"},
-      {"name": "Two Minute Papers", "channel_id": "UCbfYPyITQ-7l4upoX8nvctg", "category": "ai-content", "note": "162万订阅，AI研究可视化，2分钟找到视频素材"},
-      {"name": "AI Explained", "channel_id": "UCSHZKyawb77ixDdsGog4iWA", "category": "ai-content", "note": "AI模型深度评测，帮你判断哪个工具值得做内容"},
-      {"name": "Curious Refuge", "channel_id": "UCy0mLaTb55B7RjJ1HqgL9Gw", "category": "ai-content", "note": "AI电影制作，内容创作天花板"},
-      {"name": "Dan Koe", "channel_id": "UCzUAbibdyA7NxQBxLN6jMhw", "category": "productivity", "note": "一人公司98%利润率，内容创作者商业模式标杆"},
-      {"name": "Thomas Frank", "channel_id": "UCG-KntY7aVnIGXYEBQvmBAQ", "category": "productivity", "note": "AI+Notion+生产力系统，可复用的创作工作流"},
-      {"name": "Tiago Forte", "channel_id": "UCmvYCR68Pd5k2A4x5RJHo0w", "category": "productivity", "note": "Second Brain作者，知识管理+AI"},
-      {"name": "Cole Medin", "channel_id": "UCMDV3qWp1inVw7QFvbJuJww", "category": "ai-workflow", "note": "n8n+AI Agent教程，帮你自动化内容生产"},
-      {"name": "David Ondrej", "channel_id": "UC-JoZ7GinFZT5wNLTfhbbzA", "category": "ai-workflow", "note": "AI自动化工作流，$45K/月社区运营"},
-      {"name": "AI Foundations", "channel_id": "UCeB_OpSpbPVx4M0NOSyqfbA", "category": "ai-workflow", "note": "vibe coding+AI自动化，零代码搭工具"},
-      {"name": "LangChain", "channel_id": "UCWF3JkBfDJ2Moie0HrBs3zw", "category": "agent", "note": "Agent框架官方教程，了解Agent能做什么"},
-      {"name": "Matthew Berman", "channel_id": "UCwFkBW1aFQCqL4wOn4t0fSA", "category": "agent", "note": "开源Agent+本地LLM部署，前沿Agent工具实测"},
-      {"name": "Dave Ebbelaar", "channel_id": "UCf8mhj6Qbi3g7DjiYFh0vIA", "category": "agent", "note": "AI自动化+Agent实战项目"},
-      {"name": "Nate Herk", "channel_id": "UCnMVveASQdRkYJK2AFfDMxg", "category": "ai-workflow", "note": "n8n+AI Agent实战案例"},
-      {"name": "Lex Fridman", "channel_id": "UCSHZKyawb77ixDdsGog4iWA", "category": "ai-startup", "note": "深度AI访谈，内容创作者的深度素材库"}
+      {"name": "Y Combinator", "channel_id": "UCcefcZRL2oaA_uBNeo5UOWg", "category": "ai-startup", "note": "顶级加速器，AI创业信号+Lightcone播客"},
+      {"name": "OpenAI", "channel_id": "UCXZCJLdBC09xxGZ6gcdrc6A", "category": "ai-startup", "note": "GPT/Sora/Codex官方发布"},
+      {"name": "Anthropic", "channel_id": "UCOIji0UklfggVrY7Ym-IfDQ", "category": "ai-startup", "note": "Claude官方，提示工程+AI安全"},
+      {"name": "Andrej Karpathy", "channel_id": "UCXUPKJO5MZQN11PqgIvyuvQ", "category": "ai-startup", "note": "LLM原理，AI底层认知——内容创作者的硬知识"},
+      {"name": "Matt Wolfe", "channel_id": "UCMyXJrrIGGyi7bnYI3c9mgA", "category": "ai-content", "note": "AI工具周报，FutureTools.io创始人，选题第一来源"},
+      {"name": "Two Minute Papers", "channel_id": "UCbfYPyITQ-7l4upoX8nvctg", "category": "ai-content", "note": "AI研究可视化，2分钟看懂前沿"},
+      {"name": "AI Explained", "channel_id": "UCSHZKyawb77ixDdsGog4iWA", "category": "ai-content", "note": "AI模型深度评测"},
+      {"name": "Lex Fridman", "channel_id": "UCSHZKyawb77ixDdsGog4iWA", "category": "ai-startup", "note": "AI领袖深度访谈"},
+      {"name": "Thomas Frank", "channel_id": "UCd_WBvzBg1UbHE8j8MIL5Ng", "category": "productivity", "note": "AI+Notion+生产力系统"},
+      {"name": "Tiago Forte", "channel_id": "UCmvYCRYPDlzSHVNCI_ViJDQ", "category": "productivity", "note": "第二大脑作者，知识管理+AI"},
+      {"name": "Ali Abdaal", "channel_id": "UCoOae5nYA7VqaXzerajD0lg", "category": "productivity", "note": "600万订阅，创作者生产力+变现"},
+      {"name": "Dan Koe", "channel_id": "UCzUAbibdyA7NxQBxLN6jMhw", "category": "ai-startup", "note": "一人公司98%利润率，内容创作者商业标杆"},
+      {"name": "Cole Medin", "channel_id": "UCMwVTLZIRRUyyVrkjDpn4pA", "category": "ai-workflow", "note": "n8n+AI Agent教程，零代码自动化"},
+      {"name": "Nate Herk", "channel_id": "UC2ojq-nuP8ceeHqiroeKhBA", "category": "ai-workflow", "note": "n8n实战，AI自动化工作流"},
+      {"name": "David Ondrej", "channel_id": "UCPGrgwfbkjTIgPoOh2q1BAg", "category": "ai-workflow", "note": "AI自动化社区$45K/月，n8n专家"},
+      {"name": "Liam Ottley", "channel_id": "UCui4jxDaMb53Gdh-AZUTPAg", "category": "ai-startup", "note": "69万订阅，AI创业+自动化服务"},
+      {"name": "Noah Kagan", "channel_id": "UCF2v8v8te3_u4xhIQ8tGy1g", "category": "ai-startup", "note": "AppSumo创始人，零成本增长+营销"},
+      {"name": "Alex Hormozi", "channel_id": "UCUyDOdBWhC1MCxEjC46d-zw", "category": "ai-startup", "note": "获客/销售/定价，创作者变现方法论"},
+      {"name": "Tao Prompts", "channel_id": "UCc1qMq2UBJD9cSKbeBwGoZQ", "category": "ai-content", "note": "电影级AI视频制作，叙事+AI视频"},
+      {"name": "PremiereGal", "channel_id": "UCaDZLsDEEBBJESXmmi-9m5w", "category": "ai-content", "note": "AI视频剪辑技巧，短视频制作"},
+      {"name": "Olivio Sarikas", "channel_id": "UCCKx8mAHiFus-XYQLy_WnaA", "category": "ai-content", "note": "StableDiffusion/ComfyUI教程，AI图像"},
+      {"name": "Aitrepreneur", "channel_id": "UCEAbqW0HFB_UxZoUDO0kJBw", "category": "ai-content", "note": "AI工具入门，新手友好"},
+      {"name": "Curious Refuge", "channel_id": "UClnFtyUEaxQOCd1s5NKYGFA", "category": "ai-content", "note": "AI电影制作，好莱坞级叙事"},
+      {"name": "Think Media", "channel_id": "UCjN5T8kmUBHcmLnO3Tobshg", "category": "ai-content", "note": "YouTube增长策略+设备评测"},
+      {"name": "Film Booth", "channel_id": "UCSQ6ebJE6MTrEAN_P-L-fuA", "category": "ai-content", "note": "YouTube封面/标题/点击率优化"},
+      {"name": "LangChain", "channel_id": "UCC-lyoTfSrcJzA1ab3APAgw", "category": "agent", "note": "Agent框架官方教程"},
+      {"name": "Matthew Berman", "channel_id": "UCzi5kcwU8aT4aLR7LcYhfWQ", "category": "agent", "note": "开源Agent+本地LLM部署"},
+      {"name": "Dave Ebbelaar", "channel_id": "UCn8ujwUInbJkBhffxqAPBVQ", "category": "agent", "note": "AI自动化+Agent实战项目"},
+      {"name": "No Priors", "channel_id": "UCSI7h9hydQ40K5MJHnCrQvw", "category": "ai-startup", "note": "Sarah Guo+Elad Gil，AI投资前沿"},
+      {"name": "Lenny's Podcast", "channel_id": "UC6t1O76G0jYXOAoYCm153dA", "category": "ai-startup", "note": "产品增长+AI应用"},
+      {"name": "Pat Flynn", "channel_id": "UCGk1LitxAZVnqQn0_nt5qxw", "category": "ai-startup", "note": "在线商业+被动收入，创作者创业"}
     ],
     "reddit": [
-      {"subreddit": "ChatGPT", "category": "ai-content", "note": "ChatGPT使用技巧，选题金矿"},
-      {"subreddit": "ChatGPTPromptGenius", "category": "ai-content", "note": "提示词宝库，内容创作灵感"},
-      {"subreddit": "ChatGPTPro", "category": "ai-content", "note": "AI高级用法，深度内容素材"},
-      {"subreddit": "ClaudeAI", "category": "ai-content", "note": "Claude深度使用+创作"},
-      {"subreddit": "n8n", "category": "ai-workflow", "note": "自动化工作流，效率工具"},
-      {"subreddit": "StableDiffusion", "category": "ai-content", "note": "AI图像生成最新技术"},
-      {"subreddit": "LocalLLaMA", "category": "agent", "note": "本地模型部署，Agent自建"},
-      {"subreddit": "MachineLearning", "category": "ai-startup", "note": "ML研究前沿，深度内容"},
-      {"subreddit": "artificial", "category": "ai-startup", "note": "AI综合新闻，每日选题"},
-      {"subreddit": "singularity", "category": "ai-startup", "note": "AI未来趋势，前瞻性内容"}
+      {"subreddit": "ChatGPT", "category": "ai-content", "note": "ChatGPT技巧，选题+工具发现"},
+      {"subreddit": "ChatGPTPro", "category": "ai-content", "note": "AI高级用法，深度内容"},
+      {"subreddit": "ChatGPTPromptGenius", "category": "ai-content", "note": "提示词灵感"},
+      {"subreddit": "ClaudeAI", "category": "ai-content", "note": "Claude深度使用"},
+      {"subreddit": "StableDiffusion", "category": "ai-content", "note": "AI图像生成"},
+      {"subreddit": "midjourney", "category": "ai-content", "note": "Midjourney技巧+作品"},
+      {"subreddit": "aiArt", "category": "ai-content", "note": "AI艺术创作"},
+      {"subreddit": "aivideo", "category": "ai-content", "note": "AI视频生成"},
+      {"subreddit": "n8n", "category": "ai-workflow", "note": "自动化工作流"},
+      {"subreddit": "YouTubeCreators", "category": "ai-content", "note": "YouTube创作+增长"},
+      {"subreddit": "NewTubers", "category": "ai-content", "note": "新晋创作者"},
+      {"subreddit": "LocalLLaMA", "category": "agent", "note": "本地模型+Agent"},
+      {"subreddit": "SaaS", "category": "ai-startup", "note": "SaaS创业+商业模式"},
+      {"subreddit": "Entrepreneur", "category": "ai-startup", "note": "创业案例+方法"},
+      {"subreddit": "sidehustle", "category": "ai-startup", "note": "副业+收入来源"},
+      {"subreddit": "content_marketing", "category": "ai-content", "note": "内容营销策略"},
+      {"subreddit": "artificial", "category": "ai-startup", "note": "AI综合新闻"},
+      {"subreddit": "MachineLearning", "category": "ai-startup", "note": "ML前沿（AI筛后保留创作者相关）"}
     ],
     "hackernews": {
       "enabled": true,
       "url": "https://news.ycombinator.com/rss",
       "category": "ai-startup",
-      "note": "技术创业第一信号源，AI相关帖子自动筛选"
+      "note": "技术创业第一信号源"
     },
     "producthunt": {
       "enabled": true,
       "url": "https://www.producthunt.com/feed",
       "category": "ai-startup",
-      "note": "每日新产品，AI工具首发地，选题+工具发现"
-    },
-    "arxiv": {
-      "enabled": true,
-      "categories": [
-        {"id": "cs.AI", "name": "AI", "category": "ai-startup"},
-        {"id": "cs.CL", "name": "NLP", "category": "agent"},
-        {"id": "cs.CV", "name": "CV", "category": "ai-content"}
-      ],
-      "note": "AI研究论文前沿，深度内容素材"
-    },
-    "wechat": {
-      "enabled": true,
-      "note": "微信公众号通过Wechat2RSS获取(wechat2rss.xlab.app)。此源不稳定，抓取失败时静默跳过。",
-      "accounts": [
-        {"name": "数字生命卡兹克", "account_id": "shuzishengmingkazike", "category": "ai-content", "note": "AI内容创作标杆"},
-        {"name": "特工宇宙", "account_id": "tegongyuzhou", "category": "ai-workflow", "note": "AI工作流+自动化"},
-        {"name": "新智元", "account_id": "xin-zhi-yuan", "category": "ai-startup", "note": "AI产业新闻"},
-        {"name": "沃垠AI", "account_id": "woyin-ai", "category": "ai-startup", "note": "AI创业分析"},
-        {"name": "橘子汽水铺", "account_id": "juziqishuipu", "category": "productivity", "note": "独立创作者视角"},
-        {"name": "海外独角兽", "account_id": "haiwaidujiaoshou", "category": "ai-startup", "note": "海外AI创业深读"},
-        {"name": "量子位", "account_id": "liangziwei", "category": "ai-startup", "note": "AI产业媒体"},
-        {"name": "AppSo", "account_id": "appsolution", "category": "ai-content", "note": "数字工具推荐"},
-        {"name": "李继刚", "account_id": "lijigang", "category": "productivity", "note": "个人效率+创作思考"},
-        {"name": "夕小瑶科技说", "account_id": "xixiaoyao", "category": "ai-startup", "note": "AI科技解读"},
-        {"name": "AI产品榜", "account_id": "aichanpinbang", "category": "ai-startup", "note": "AI产品评测"},
-        {"name": "Founder Park", "account_id": "founder-park", "category": "ai-startup", "note": "创始人视角"},
-        {"name": "AI前线", "account_id": "ai-qianxian", "category": "ai-startup", "note": "AI产业前沿"},
-        {"name": "AI科技评论", "account_id": "ai-tech-review", "category": "ai-startup", "note": "AI技术评论"}
-      ]
+      "note": "每日新产品，AI工具首发地"
     }
   }
 }
