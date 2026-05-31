@@ -2,9 +2,9 @@ name: AI 雷达日报
 
 on:
   schedule:
-    # 北京时间 09:00 = UTC 01:00
+    # 北京时间 15:00 = UTC 07:00
     # GitHub Actions cron 使用 UTC 时间
-    - cron: '0 1 * * *'
+    - cron: '0 7 * * *'
   workflow_dispatch:  # 允许手动触发
 
 jobs:
