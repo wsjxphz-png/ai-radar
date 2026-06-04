@@ -61,6 +61,18 @@
       {"subreddit": "artificial", "category": "ai-startup", "note": "AI综合新闻"},
       {"subreddit": "MachineLearning", "category": "ai-startup", "note": "ML前沿（AI筛后保留创作者相关）"}
     ],
+    "twitter": [
+      {"handle": "ai_xiaomu", "category": "ai-content", "note": "AI 小木，AI 工具+教程"},
+      {"handle": "op7418", "category": "ai-content", "note": "归藏，AI 产品深度分析"},
+      {"handle": "InnaLyceyum", "category": "ai-content", "note": "Inna，AI 内容创作"},
+      {"handle": "JasonCharlie12", "category": "ai-startup", "note": "Jason Charlie，AI 创业+产品"},
+      {"handle": "dontbesilent", "category": "ai-content", "note": "不要沉默，AI 资讯"},
+      {"handle": "hq4ai", "category": "ai-content", "note": "HQ4AI，AI 工具+资源"},
+      {"handle": "XDash", "category": "ai-startup", "note": "XDash，AI 产品+创业"},
+      {"handle": "dotey", "category": "ai-content", "note": "dotey，AI 技术+工具"},
+      {"handle": "canghe", "category": "ai-workflow", "note": "藏鹤，AI 工作流+自动化"},
+      {"handle": "FuSheng_0306", "category": "ai-content", "note": "浮生，AI 资讯+教程"}
+    ],
     "hackernews": {
       "enabled": true,
       "url": "https://news.ycombinator.com/rss",

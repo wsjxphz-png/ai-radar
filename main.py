@@ -159,6 +159,169 @@ def _parse(entry, task: Dict) -> Optional[Dict]:
     return {"id": uid, "source_name": task["source_name"], "platform": task["platform"], "category": task.get("category","other"), "title": title[:200] if title else "(无标题)", "description": desc[:2000] if desc else "", "url": link, "pub_date": pub_date.isoformat(), "pub_date_display": pub_date.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET))).strftime("%m-%d %H:%M")}
 
 
+# Twitter/X GraphQL API 配置
+TWITTER_BEARER = "AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA"
+TWITTER_USER_BY_SCREEN_NAME = "IGgvgiOx4QZndDHuD3x9TQ"
+TWITTER_USER_TWEETS = "PNd0vlufvrcIwrAnBYKE9g"
+TWITTER_API_BASE = "https://x.com/i/api/graphql"
+TWITTER_FEATURES = json.dumps({
+    "responsive_web_graphql_exclude_directive_enabled": True,
+    "verified_phone_label_enabled": False,
+    "creator_subscriptions_tweet_preview_api_enabled": True,
+    "responsive_web_graphql_timeline_navigation_enabled": True,
+    "c9s_tweet_anatomy_moderator_badge_enabled": True,
+    "tweetypie_unmention_optimization_enabled": True,
+    "responsive_web_edit_tweet_api_enabled": True,
+    "longform_notetweets_consumption_enabled": True,
+    "tweet_awards_web_tipping_enabled": False,
+    "freedom_of_speech_not_reach_fetch_enabled": True,
+    "standardized_nudges_misinfo": True,
+    "rweb_video_timestamps_enabled": True,
+    "longform_notetweets_rich_text_read_enabled": True,
+    "longform_notetweets_inline_media_enabled": True,
+    "responsive_web_media_download_video_enabled": False,
+    "responsive_web_enhance_cards_enabled": False
+}, separators=(',', ':'))
+
+
+# ============================================================
+# Twitter/X 抓取（GraphQL API）
+# ============================================================
+
+def _twitter_user_id(session: requests.Session, handle: str) -> Optional[str]:
+    """通过 screen_name 获取 Twitter 用户 ID"""
+    variables = json.dumps({"screen_name": handle}, separators=(',', ':'))
+    url = f"{TWITTER_API_BASE}/{TWITTER_USER_BY_SCREEN_NAME}/UserByScreenName?variables={variables}&features={TWITTER_FEATURES}"
+    try:
+        resp = session.get(url, timeout=REQUEST_TIMEOUT)
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("data", {}).get("user", {}).get("result", {}).get("rest_id")
+    except Exception:
+        pass
+    return None
+
+
+def _twitter_tweets(session: requests.Session, user_id: str, count: int = 30) -> List[Dict]:
+    """获取用户推文列表，返回原始 tweet dict 列表"""
+    variables = json.dumps({
+        "userId": user_id, "count": count,
+        "includePromotedContent": False,
+        "withQuickPromoteEligibilityTweetFields": False,
+        "withVoice": False, "withV2Timeline": True
+    }, separators=(',', ':'))
+    url = f"{TWITTER_API_BASE}/{TWITTER_USER_TWEETS}/UserTweets?variables={variables}&features={TWITTER_FEATURES}"
+    try:
+        resp = session.get(url, timeout=REQUEST_TIMEOUT)
+        if resp.status_code != 200:
+            return []
+        data = resp.json()
+        timeline = data.get("data", {}).get("user", {}).get("result", {}).get("timeline", {}).get("timeline", {})
+        instructions = timeline.get("instructions", [])
+        tweets = []
+        for inst in instructions:
+            if inst.get("type") == "TimelineAddEntries":
+                for entry in inst.get("entries", []):
+                    tweet_result = entry.get("content", {}).get("itemContent", {}).get("tweet_results", {}).get("result", {})
+                    if tweet_result.get("__typename") == "Tweet" and "legacy" in tweet_result:
+                        tweets.append(tweet_result)
+        return tweets
+    except Exception:
+        return []
+
+
+def fetch_twitter_via_api(twitter_sources: List[Dict], cookies_json: str) -> List[Dict]:
+    """通过 Twitter GraphQL API 抓取用户最近推文（需要 auth_token + ct0 cookies）"""
+    if not cookies_json:
+        log("⚠️ TWITTER_COOKIES 未设置，跳过 Twitter 抓取")
+        return []
+
+    try:
+        cookies = json.loads(cookies_json)
+    except Exception as e:
+        log(f"⚠️ TWITTER_COOKIES JSON 解析失败: {e}")
+        return []
+
+    auth_token = cookies.get("auth_token", "")
+    ct0 = cookies.get("ct0", "")
+    if not auth_token or not ct0:
+        log("⚠️ TWITTER_COOKIES 缺少 auth_token 或 ct0")
+        return []
+
+    session = requests.Session()
+    session.cookies.set("auth_token", auth_token)
+    session.cookies.set("ct0", ct0)
+    session.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Authorization": f"Bearer {TWITTER_BEARER}",
+        "X-Csrf-Token": ct0,
+        "X-Twitter-Active-User": "yes",
+        "X-Twitter-Auth-Type": "OAuth2Session",
+    })
+
+    results = []
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    ok_count = 0
+
+    log(f"\n🐦 抓取 {len(twitter_sources)} 个 Twitter 源（GraphQL API）...")
+
+    for i, tw in enumerate(twitter_sources):
+        handle = tw.get("handle", "")
+        if not handle:
+            continue
+        try:
+            user_id = _twitter_user_id(session, handle)
+            if not user_id:
+                log(f"   ⚠️ @{handle}: 找不到用户")
+                continue
+
+            tweets = _twitter_tweets(session, user_id, count=30)
+
+            added = 0
+            for tweet in tweets:
+                legacy = tweet.get("legacy", {})
+                created_str = legacy.get("created_at", "")
+                if not created_str:
+                    continue
+
+                # 解析 "Thu Jun 04 09:38:12 +0000 2026" 格式
+                try:
+                    tweet_time = datetime.strptime(created_str, "%a %b %d %H:%M:%S %z %Y")
+                except Exception:
+                    continue
+
+                if tweet_time < cutoff:
+                    continue
+
+                text = (legacy.get("full_text", "") or "").strip()
+                if not text:
+                    continue
+
+                tweet_id = tweet.get("rest_id", "")
+                tweet_url = f"https://x.com/{handle}/status/{tweet_id}"
+                uid = hashlib.md5(str(tweet_id).encode()).hexdigest()[:12]
+
+                results.append({
+                    "id": uid, "source_name": f"@{handle}", "platform": "twitter",
+                    "category": tw.get("category", "other"),
+                    "title": text[:200], "description": text[:2000],
+                    "url": tweet_url, "pub_date": tweet_time.isoformat(),
+                    "pub_date_display": tweet_time.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET))).strftime("%m-%d %H:%M")
+                })
+                added += 1
+
+            log(f"   🐦 @{handle} ✅ {added}条")
+            ok_count += 1
+            time.sleep(0.8)
+
+        except Exception as e:
+            log(f"   ⚠️ Twitter @{handle}: {str(e)[:80]}")
+            continue
+
+    log(f"   Twitter: {ok_count}/{len(twitter_sources)} 成功 → {len(results)}条")
+    return results
+
+
 # ============================================================
 # 第三步：预过滤
 # ============================================================
@@ -614,10 +777,23 @@ def main():
     with open(args.sources, "r", encoding="utf-8") as f:
         config = json.load(f)
     sources_config = config.get("sources", config)
+
+    # 分离 Twitter 源（使用 twikit 抓取，不走 RSS）
+    twitter_sources = sources_config.get("twitter", []) if isinstance(sources_config, dict) else []
+
     tasks = build_rss_urls(sources_config)
-    log(f"📋 {len(tasks)} 个抓取任务")
+    log(f"📋 {len(tasks)} 个 RSS 抓取任务 + {len(twitter_sources)} 个 Twitter 源")
 
     all_items = fetch_all(tasks)
+
+    # 抓取 Twitter
+    if twitter_sources:
+        twitter_items = fetch_twitter_via_api(
+            twitter_sources,
+            os.environ.get("TWITTER_COOKIES", "")
+        )
+        all_items.extend(twitter_items)
+
     if not all_items: log("\n❌ 无内容"); sys.exit(1)
 
     filtered, _, _ = pre_filter(all_items)

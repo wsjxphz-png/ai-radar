@@ -28,6 +28,7 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          TWITTER_COOKIES: ${{ secrets.TWITTER_COOKIES }}
         run: python main.py
 
       - name: 失败通知（如果日报生成失败）
