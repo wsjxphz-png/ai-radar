@@ -156,7 +156,19 @@ def _parse(entry, task: Dict) -> Optional[Dict]:
     link = entry.get("link", "")
     raw_id = entry.get("id") or link or title + str(pub_date)
     uid = hashlib.md5(raw_id.encode()).hexdigest()[:12]
-    return {"id": uid, "source_name": task["source_name"], "platform": task["platform"], "category": task.get("category","other"), "title": title[:200] if title else "(无标题)", "description": desc[:2000] if desc else "", "url": link, "pub_date": pub_date.isoformat(), "pub_date_display": pub_date.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET))).strftime("%m-%d %H:%M")}
+    # 客观互动量（数据锚定）：YouTube 播放量 / Reddit 赞数等，AI 评分时作为真实性/重要性的客观参考
+    eng = 0
+    ms = getattr(entry, "media_statistics", None)
+    if isinstance(ms, dict) and ms.get("views"):
+        try: eng = int(ms["views"])
+        except Exception: pass
+    if not eng:
+        for attr in ("score", "num_comments"):
+            v = getattr(entry, attr, None)
+            if v:
+                try: eng = int(v); break
+                except Exception: pass
+    return {"id": uid, "source_name": task["source_name"], "platform": task["platform"], "category": task.get("category","other"), "title": title[:200] if title else "(无标题)", "description": desc[:2000] if desc else "", "url": link, "pub_date": pub_date.isoformat(), "pub_date_display": pub_date.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET))).strftime("%m-%d %H:%M"), "engagement": eng}
 
 
 # Twitter/X GraphQL API 配置
@@ -300,13 +312,19 @@ def fetch_twitter_via_api(twitter_sources: List[Dict], cookies_json: str) -> Lis
                 tweet_id = tweet.get("rest_id", "")
                 tweet_url = f"https://x.com/{handle}/status/{tweet_id}"
                 uid = hashlib.md5(str(tweet_id).encode()).hexdigest()[:12]
+                eng = (
+                    int(legacy.get("favorite_count") or 0)
+                    + int(legacy.get("retweet_count") or 0)
+                    + int(legacy.get("reply_count") or 0)
+                )
 
                 results.append({
                     "id": uid, "source_name": f"@{handle}", "platform": "twitter",
                     "category": tw.get("category", "other"),
                     "title": text[:200], "description": text[:2000],
                     "url": tweet_url, "pub_date": tweet_time.isoformat(),
-                    "pub_date_display": tweet_time.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET))).strftime("%m-%d %H:%M")
+                    "pub_date_display": tweet_time.astimezone(timezone(timedelta(hours=TIMEZONE_OFFSET))).strftime("%m-%d %H:%M"),
+                    "engagement": eng,
                 })
                 added += 1
 
@@ -440,6 +458,8 @@ SYSTEM_PROMPT = f"""你是「AI 创作者参谋部」的首席分析师。你的
 
 **评分总原则：优先考虑「今天就能动手做」的机会，而非「以后也许有用」的资讯。宁可推荐一条能立刻上手的机会，也不要堆十条泛泛的资讯。**
 
+**互动量锚（数据锚定）：每条标注的「互动量」是客观数据（播放量/赞数/转发），不是你的主观判断。评分时用它校准真实性——互动量极低（如 <100）却声称"爆火/必学"的内容，真实性要打折；互动量高说明被大量人验证过，值得多看。没有标注互动量的条目（如博客文章）按正常评分，不要臆测互动量。**
+
 | 维度 | 1分 | 10分 |
 |------|-----|------|
 | **内容价值** | 和内容创作无关 | 直接提升内容质量/产量/效率 |
@@ -549,7 +569,9 @@ def build_ai_input(items: List[Dict]) -> str:
         parts.append(f"\n## {label} ({len(cat_items)}条)\n")
         for item in cat_items:
             idx += 1
-            parts.append(f"[{idx}]【{item['platform']}】{item['source_name']} | {item.get('pub_date_display','?')}\n    {item['title']}\n    {item['description'][:500]}\n    {item.get('url','')}\n")
+            eng = item.get("engagement", 0) or 0
+            eng_txt = f" ｜ 互动量 {eng}" if eng > 0 else ""
+            parts.append(f"[{idx}]【{item['platform']}】{item['source_name']}{eng_txt} | {item.get('pub_date_display','?')}\n    {item['title']}\n    {item['description'][:500]}\n    {item.get('url','')}\n")
     text = "\n".join(parts)
     log(f"📝 AI输入: {idx}条, ~{len(text)//2}tokens")
     return text
