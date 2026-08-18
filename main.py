@@ -21,9 +21,11 @@ import feedparser
 # ============================================================
 # 配置
 # ============================================================
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+# AI 平台统一配置（2026-08-19 迁移：DeepSeek → Agnes AI，兼容旧变量名）
+AI_API_KEY = os.environ.get("AI_API_KEY", os.environ.get("DEEPSEEK_API_KEY", ""))
+AI_BASE_URL = os.environ.get("AI_BASE_URL", "https://apihub.agnes-ai.com/v1")
+AI_MODEL = os.environ.get("AI_MODEL", "agnes-2.5-flash")
 FEISHU_WEBHOOK   = os.environ.get("FEISHU_WEBHOOK", "")
-DEEPSEEK_MODEL   = os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
 TIMEZONE_OFFSET  = 8
 REQUEST_TIMEOUT  = 30
 REQUEST_DELAY    = 0.5
@@ -557,13 +559,13 @@ def build_ai_input(items: List[Dict]) -> str:
 
 
 def call_deepseek(user_content: str) -> Optional[Dict]:
-    if not DEEPSEEK_API_KEY:
-        log("❌ DEEPSEEK_API_KEY 未设置"); return None
-    payload = {"model": DEEPSEEK_MODEL, "messages": [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": user_content}], "temperature": 0.3, "max_tokens": 8000, "response_format": {"type": "json_object"}}
-    log(f"\n🤖 调用 DeepSeek...")
+    if not AI_API_KEY:
+        log("❌ AI_API_KEY 未设置"); return None
+    payload = {"model": AI_MODEL, "messages": [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": user_content}], "temperature": 0.3, "max_tokens": 16000, "response_format": {"type": "json_object"}}
+    log(f"\n🤖 调用 AI({AI_MODEL})...")
     for attempt in range(MAX_RETRIES + 1):
         try:
-            resp = requests.post("https://api.deepseek.com/v1/chat/completions", headers={"Authorization": f"Bearer {DEEPSEEK_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=120)
+            resp = requests.post(f"{AI_BASE_URL}/chat/completions", headers={"Authorization": f"Bearer {AI_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=180)
             if resp.status_code == 200:
                 data = resp.json()
                 content = data["choices"][0]["message"]["content"].strip()
