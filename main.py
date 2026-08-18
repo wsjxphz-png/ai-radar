@@ -565,7 +565,7 @@ def call_deepseek(user_content: str) -> Optional[Dict]:
     log(f"\n🤖 调用 AI({AI_MODEL})...")
     for attempt in range(MAX_RETRIES + 1):
         try:
-            resp = requests.post(f"{AI_BASE_URL}/chat/completions", headers={"Authorization": f"Bearer {AI_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=180)
+            resp = requests.post(f"{AI_BASE_URL.rstrip('/')}/chat/completions", headers={"Authorization": f"Bearer {AI_API_KEY}", "Content-Type": "application/json"}, json=payload, timeout=180)
             if resp.status_code == 200:
                 data = resp.json()
                 content = data["choices"][0]["message"]["content"].strip()
@@ -730,7 +730,7 @@ def format_feishu(ai: Dict, stats: Dict) -> Dict:
     # 尾部
     md.append("\n━━━━━━━━━━━━━━━━━━━")
     md.append(f"🤖 AI 创作者机会雷达 · 每日 {d.strftime('%H:%M')} 自动生成")
-    md.append(f"AI: DeepSeek · {stats['ok_sources']}/{stats['total_sources']} 源抓取成功 · 关注 Reddit/YouTube/ProductHunt")
+    md.append(f"AI: {AI_MODEL} · {stats['ok_sources']}/{stats['total_sources']} 源抓取成功 · 关注 Reddit/YouTube/ProductHunt")
     md.append("")
 
     content = "\n".join(md)
@@ -813,7 +813,7 @@ def main():
     stats = {"filtered": len(filtered), "ok_sources": len(set(it["source_name"] for it in all_items)), "total_sources": len(tasks)}
 
     if ai_result is None:
-        content_md = f"🤖 AI 创作者机会雷达 · {datetime.now().strftime('%Y.%m.%d')}\n\n⚠️ AI 分析暂不可用。今日抓取 {len(filtered)} 条内容。\n\n请检查 DeepSeek API。"
+        content_md = f"🤖 AI 创作者机会雷达 · {datetime.now().strftime('%Y.%m.%d')}\n\n⚠️ AI 分析暂不可用。今日抓取 {len(filtered)} 条内容。"
         card = {"msg_type":"interactive","card":{"header":{"template":"blue","title":{"tag":"plain_text","content":"🤖 AI 创作者机会雷达"}},"elements":[{"tag":"markdown","content":content_md}]}}
     else:
         card = format_feishu(ai_result, stats)
