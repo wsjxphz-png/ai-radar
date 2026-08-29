@@ -5,8 +5,11 @@ name: 雷达看门狗
 # 2026-08-14 加装：此前 8/4 起 workflow 被 disabled_inactivity 禁用 10 天无人知晓。
 on:
   schedule:
-    # 北京时间每天 18:30 = UTC 10:30（主推送 15:00 之后，留足 GitHub 调度延迟余量）
-    - cron: "30 10 * * *"
+    # 北京时间每天 06:00 = UTC 22:00。
+    # 2026-08-29 从 10:30 挪到 22:00：8-26/27 GitHub 平台级 schedule 延迟后，
+    # 主推送 run 可能延迟到 UTC 18-21 点才创建，看门狗若在其前检查会误判
+    # 「今日无成功」而补推 → 与延迟到达的主推送双推。
+    - cron: "0 22 * * *"
   workflow_dispatch:
 
 permissions:
@@ -22,6 +25,9 @@ jobs:
         env:
           WF: daily-report.yml
           REPO: ${{ github.repository }}
+          # 2026-08-29 修复：gh CLI 在 Actions 里不自动继承 GITHUB_TOKEN，
+          # 此前看门狗自 8-14 上线起每次运行都 exit 4（自愈机制从未生效）
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -e
           TODAY=$(date -u +%Y-%m-%d)
