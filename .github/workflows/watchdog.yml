@@ -44,7 +44,9 @@ jobs:
           fi
 
           # 2) 快速通道：推送成功标记命中（主 workflow 成功后写北京时间日期并随心跳提交）。
-          #    标记比 run status 可靠——run 可能被超时 kill 但推送已成功，只看 status 会误补推。
+          #    注（2026-09-03 审查确认）：job 级 kill 连 marker 步骤一起终止，故防不了
+          #    kill 场景——那是下面 age 主判定的职责；此标记是与 run status 互为冗余的
+          #    成功信号 + 北京日界语义（跨 UTC 午夜不混淆，早退命中时 age 判定必也 <24h）。
           #    （2026-09-03 与 opc 的 push_marker 机制对齐；时间基准同为北京时间 CST）
           TODAY_CST=$(TZ=Asia/Shanghai date +%Y-%m-%d)
           MARKER=push_marker.json

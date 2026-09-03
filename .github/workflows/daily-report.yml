@@ -43,9 +43,11 @@ jobs:
         run: python main.py
 
       # 推送成功标记：main.py 成功（exit 0 = 推送成功或过滤后无内容）后写北京时间日期，
-      # 随心跳步骤提交回仓库。看门狗优先读它判断「今日是否已送达」——
-      # 比 run status 可靠：run 可能被超时 kill（status 非 success）但推送其实已成功
-      # （2026-09-03 与 opc 的 push_marker 机制对齐）
+      # 随心跳步骤提交回仓库。看门狗读它做「今日(北京)已送达」早退。
+      # 注（2026-09-03 审查确认）：job 级 kill（超时/cancel）会连本步骤一起终止，
+      # 故它防不了 kill 场景——那是看门狗 age 主判定的职责；本标记的价值是与
+      # run status 互为冗余的成功信号 + 北京时间日界语义（跨 UTC 午夜不混淆）。
+      # 与 opc 的 push_marker 机制对齐。
       - name: 推送成功标记
         if: success()
         run: echo "$(TZ=Asia/Shanghai date +%Y-%m-%d)" > push_marker.json
@@ -64,6 +66,9 @@ jobs:
           echo "last_run: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > last_run.txt
           git config user.name "ai-radar-bot"
           git config user.email "ai-radar-bot@users.noreply.github.com"
-          git add last_run.txt push_marker.json
+          git add last_run.txt
+          # push_marker.json 首次成功运行前不存在（2026-09-03 审查 F2：无容错时
+          # 首个失败日 git add 报 fatal → 心跳静默失效一天）
+          if [ -f push_marker.json ]; then git add push_marker.json; fi
           git diff --cached --quiet || git commit -m "chore: heartbeat $(date -u +%Y%m%d-%H%M)"
           git push
