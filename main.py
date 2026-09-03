@@ -818,7 +818,14 @@ def main():
     else:
         card = format_feishu(ai_result, stats)
 
-    send_feishu(card)
+    if not send_feishu(card):
+        log("\n"+"="*50)
+        log("❌ 主流程完成但飞书推送失败")
+        log("="*50)
+        # 2026-09-03 修复（同 opc 8-14 P0）：推送失败必须非零退出，
+        # 否则 workflow 显示 success → 看门狗判定「今日已成功」不补推 → 静默丢推送。
+        # exit 0 掩盖曾让自愈体系建立在错误成功信号上。
+        sys.exit(1)
     log("\n"+"="*50)
     log("✅ 完成")
     log("="*50)

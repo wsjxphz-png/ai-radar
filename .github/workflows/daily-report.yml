@@ -10,6 +10,12 @@ on:
 permissions:
   contents: write
 
+# 同一时间只允许跑一个（2026-09-03 与 opc-digdaily 对齐）：
+# 看门狗补推 dispatch 与 schedule 撞车时排队而非并发，避免双写/双推
+concurrency:
+  group: daily-report
+  cancel-in-progress: false
+
 jobs:
   daily-report:
     runs-on: ubuntu-latest
@@ -36,6 +42,14 @@ jobs:
           TWITTER_COOKIES: ${{ secrets.TWITTER_COOKIES }}
         run: python main.py
 
+      # 推送成功标记：main.py 成功（exit 0 = 推送成功或过滤后无内容）后写北京时间日期，
+      # 随心跳步骤提交回仓库。看门狗优先读它判断「今日是否已送达」——
+      # 比 run status 可靠：run 可能被超时 kill（status 非 success）但推送其实已成功
+      # （2026-09-03 与 opc 的 push_marker 机制对齐）
+      - name: 推送成功标记
+        if: success()
+        run: echo "$(TZ=Asia/Shanghai date +%Y-%m-%d)" > push_marker.json
+
       - name: 失败通知（如果日报生成失败）
         if: failure()
         run: |
@@ -43,12 +57,13 @@ jobs:
 
       # 心跳保持：每次运行提交时间戳，保证仓库持续有活动，
       # 防止 GitHub 因 60 天无仓库活动自动禁用 schedule workflow（2026-08-04 曾发生）
+      # push_marker.json 一并提交（失败日 marker 未更新 → 无 diff → 不会误标成功）
       - name: 心跳保持（防 inactivity 禁用）
         if: always()
         run: |
           echo "last_run: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > last_run.txt
           git config user.name "ai-radar-bot"
           git config user.email "ai-radar-bot@users.noreply.github.com"
-          git add last_run.txt
+          git add last_run.txt push_marker.json
           git diff --cached --quiet || git commit -m "chore: heartbeat $(date -u +%Y%m%d-%H%M)"
           git push

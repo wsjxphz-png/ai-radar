@@ -21,6 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # 读 push_marker.json（主 workflow 推送成功后写入，随心跳提交；2026-09-03 与 opc 对齐）
+      - uses: actions/checkout@v4
+
       - name: 检查并自愈主推送通道
         env:
           WF: daily-report.yml
@@ -40,7 +43,17 @@ jobs:
             echo "已自动重新启用"
           fi
 
-          # 2) 距上次成功推送 ≥ 一个周期（24h）且无任务在跑 -> 判定通道异常，静默补推一次
+          # 2) 快速通道：推送成功标记命中（主 workflow 成功后写北京时间日期并随心跳提交）。
+          #    标记比 run status 可靠——run 可能被超时 kill 但推送已成功，只看 status 会误补推。
+          #    （2026-09-03 与 opc 的 push_marker 机制对齐；时间基准同为北京时间 CST）
+          TODAY_CST=$(TZ=Asia/Shanghai date +%Y-%m-%d)
+          MARKER=push_marker.json
+          if [ -f "$MARKER" ] && [ "$(cat "$MARKER")" = "$TODAY_CST" ]; then
+            echo "今日(北京时间)已有成功推送标记，不补推"
+            exit 0
+          fi
+
+          # 3) 距上次成功推送 ≥ 一个周期（24h）且无任务在跑 -> 判定通道异常，静默补推一次
           #    ⚠ 2026-09-03 修复：原逻辑按 UTC 日历日判定（最近成功不在「今天」即补推）。
           #    本看门狗 cron 22:00 UTC 距午夜仅 2h 余量，GitHub schedule 常规延迟 2-3h 即
           #    跨 UTC 午夜（run 实际启动 00:13-01:43）→「今天」清零、而当天主推送要到
